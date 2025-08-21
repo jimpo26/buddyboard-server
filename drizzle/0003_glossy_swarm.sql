@@ -1,0 +1,2 @@
+ALTER TABLE "allowed_members_private_group" ADD COLUMN "invited_by" text NOT NULL;--> statement-breakpoint
+ALTER TABLE "allowed_members_private_group" ADD CONSTRAINT "allowed_members_private_group_invited_by_user_id_fk" FOREIGN KEY ("invited_by") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;

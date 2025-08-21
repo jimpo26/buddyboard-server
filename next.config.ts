@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    serverExternalPackages: ["@auth/core"],
+    transpilePackages: ["@activity-tracker/shared"], // if using shared package
 };
 
-export default nextConfig;
+module.exports = nextConfig;
