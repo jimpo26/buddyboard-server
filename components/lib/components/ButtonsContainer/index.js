@@ -13,15 +13,17 @@ const ButtonTextContainer = styled.div`
  * @returns
  */
 const ButtonsContainer = ({
-  children,
-  gap,
-  direction = "row"
+    children,
+    gap,
+    className,
+    direction = "row"
 }) => {
-  return /*#__PURE__*/React.createElement(ButtonTextContainer, {
-    style: {
-      gap: gap,
-      flexDirection: direction
-    }
-  }, children);
+    return /*#__PURE__*/React.createElement(ButtonTextContainer, {
+        style: {
+            gap: gap,
+            flexDirection: direction
+        },
+        className: className
+    }, children);
 };
 export default ButtonsContainer;

@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
-import { topics } from "@/db/schema";
+import { groupMembers, topics } from "@/db/schema";
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { currentUser } from "@/lib/auth";
 
 export async function GET(
@@ -19,13 +19,22 @@ export async function GET(
             return NextResponse.json({ error: "Group ID is required" }, { status: 400 });
         }
 
+        //check if user is in the group
+        const groupMember = await db.select()
+            .from(groupMembers)
+            .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, user.id!)))
+            .limit(1);
+
+        if (groupMember.length === 0) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         // Get all topics for the group
         const groupTopics = await db
             .select()
             .from(topics)
             .where(eq(topics.groupId, groupId))
             .orderBy(topics.name);
-        console.log(groupTopics)
         return NextResponse.json({
             success: true,
             topics: groupTopics

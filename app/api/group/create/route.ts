@@ -1,10 +1,8 @@
 import { currentUser } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { createGroup } from "@/lib/groups";
-import multer from "multer";
 import path from "path";
 import fs from "fs";
-import crypto from "crypto";
 import sharp from "sharp"
 
 // Disable body parsing for file uploads

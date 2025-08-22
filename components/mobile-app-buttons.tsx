@@ -8,7 +8,7 @@ import {
 
 export const MobileAppButton = ({ iosUrl, apkUrl }: { iosUrl: string, apkUrl: string }) => {
     return (
-        <ButtonsContainer>
+        <ButtonsContainer className="flex-wrap items-center justify-center">
             <GooglePlayButton
                 url={apkUrl}
                 theme={"light"}

@@ -9,7 +9,7 @@ import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { eq } from "drizzle-orm";
-import { twoFactorConfirmations } from "@/db/schema";
+import { twoFactorConfirmations, twoFactorToken } from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -36,12 +36,12 @@ export async function POST(request: NextRequest) {
 
     if (existingUser.isTwoFactorEnabled && existingUser.email) {
         if (code) {
-            const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email)
-            if (!twoFactorToken || twoFactorToken.token !== code) {
+            const twoFAToken = await getTwoFactorTokenByEmail(existingUser.email)
+            if (!twoFAToken || twoFAToken.token !== code) {
                 return NextResponse.json({ error: "Invalid code!", twoFactor: true })
             }
 
-            const hasExpired = twoFactorToken.expires < new Date()
+            const hasExpired = twoFAToken.expiresAt < new Date()
             if (hasExpired) {
                 return NextResponse.json({ error: "Code has expired!", twoFactor: true })
             }

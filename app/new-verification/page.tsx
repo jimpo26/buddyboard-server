@@ -1,4 +1,5 @@
 import { NewVerificationForm } from "@/components/new-verification-form";
+import { Suspense } from "react";
 
 const NewVerificationPage = () => {
     return (
@@ -10,7 +11,9 @@ const NewVerificationPage = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
             }} >
-                <NewVerificationForm />
+                <Suspense>
+                    <NewVerificationForm />
+                </Suspense>
             </div>
         </div>
     )

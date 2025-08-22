@@ -8,6 +8,7 @@ type ButtonsContainerProps = {
      * @default row
      */
     direction?: "row" | "column";
+    className?: string;
     children: ReactNode;
 };
 /**

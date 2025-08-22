@@ -12,7 +12,6 @@ export async function PATCH(request: Request): Promise<NextResponse> {
     const validatedFields = CreateGroupSchema.safeParse(data);
 
     if (!validatedFields.success || !groupId) {
-        console.log(validatedFields.error)
         return NextResponse.json({ error: "Invalid fields!" })
     }
 

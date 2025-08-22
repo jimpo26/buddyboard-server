@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const values = await request.json();
     const validatedFields = RegisterSchema.safeParse(values);
     if (!validatedFields.success) {
-        return { error: "Invalid fields!" }
+        return NextResponse.json({ error: "Invalid fields!" })
     }
 
     const { email, password, name } = validatedFields.data;

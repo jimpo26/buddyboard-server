@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { messages, users } from "@/db/schema";
+import { groupMembers, messages, topics, users } from "@/db/schema";
 import { currentUser } from "@/lib/auth";
 import { eq, desc, lt, and } from "drizzle-orm";
 
@@ -22,6 +22,17 @@ export async function GET(
         // Validate inputs
         if (!topicId) {
             return NextResponse.json({ success: false, error: "Topic ID is required" }, { status: 400 });
+        }
+
+        // check if user is in the group of hte topic
+        const groupMember = await db.select()
+            .from(groupMembers)
+            .innerJoin(topics, eq(groupMembers.groupId, topics.groupId))
+            .where(and(eq(topics.id, topicId), eq(groupMembers.userId, user.id!)))
+            .limit(1);
+
+        if (groupMember.length === 0) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         // Base query to get messages for the topic, ordered by newest first

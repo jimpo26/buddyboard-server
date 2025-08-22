@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { messages } from "@/db/schema";
+import { groupMembers, messages, topics } from "@/db/schema";
 import { currentUser } from "@/lib/auth";
+import { and, eq } from "drizzle-orm";
 
 // Validation schema for message creation
 const SendMessageSchema = z.object({
     content: z.string().min(1, "Message content is required"),
-    topicId: z.string().uuid("Invalid topic ID format")
+    topicId: z.string().uuid("Invalid topic ID format"),
+    optimisticTempId: z.string().optional()
 });
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -27,7 +29,18 @@ export async function POST(request: Request): Promise<NextResponse> {
             }, { status: 400 });
         }
 
-        const { content, topicId } = validatedFields.data;
+        const { content, topicId, optimisticTempId } = validatedFields.data;
+
+        //check if topicId has a groupId where the user is in
+        const groupMember = await db.select()
+            .from(groupMembers)
+            .innerJoin(topics, eq(groupMembers.groupId, topics.groupId))
+            .where(and(eq(topics.id, topicId), eq(groupMembers.userId, user.id!)))
+            .limit(1);
+
+        if (groupMember.length === 0) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         // Create the new message
         const [message] = await db
@@ -42,14 +55,14 @@ export async function POST(request: Request): Promise<NextResponse> {
         // Fetch the user info to include in response
         const userName = user.name;
         const userEmail = user.email;
-
         // Return the newly created message with user info
         return NextResponse.json({
             success: true,
             message: {
                 ...message,
                 userName,
-                userEmail
+                userEmail,
+                tempId: optimisticTempId
             }
         });
     } catch (error) {

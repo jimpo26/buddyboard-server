@@ -19,6 +19,16 @@ export async function GET(
         return NextResponse.json({ error: "Unauthorized!" })
     }
 
+    //check if user is in the group
+    const groupMember = await db.select()
+        .from(groupMembers)
+        .where(and(eq(groupMembers.groupId, id), eq(groupMembers.userId, user.id!)))
+        .limit(1);
+
+    if (groupMember.length === 0) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const group = await db.select({
         name: groups.name,
         description: groups.description,

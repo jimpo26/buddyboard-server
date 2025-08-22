@@ -1,7 +1,8 @@
 import { db } from "@/lib/db"
 import { currentUser } from "@/lib/auth";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { groupMembers } from "@/db/schema";
 /*
 type TopicList = {
     id: string,
@@ -29,6 +30,15 @@ export async function GET(
     const { groupId } = await params;
     const user = await currentUser()
     if (!user) {
+        return NextResponse.json({ error: "Unauthorized!" })
+    }
+
+    const isUserMember = await db.select()
+        .from(groupMembers)
+        .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, user.id!)))
+        .limit(1)
+
+    if (isUserMember.length === 0) {
         return NextResponse.json({ error: "Unauthorized!" })
     }
 

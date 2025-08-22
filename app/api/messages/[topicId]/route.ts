@@ -5,8 +5,8 @@ import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db"
 
-export async function GET(request: Request, { params }: { params: { topicId: string } }): Promise<NextResponse> {
-    const { topicId } = params
+export async function GET(request: Request, { params }: { params: Promise<{ topicId: string }> }): Promise<NextResponse> {
+    const { topicId } = await params
 
     if (!topicId) {
         return NextResponse.json({ error: "Invalid fields!" })

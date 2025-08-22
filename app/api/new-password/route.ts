@@ -17,16 +17,16 @@ export async function POST(request: Request) {
     const { password } = validatedFields.data;
 
     const existingToken = await getPasswordResetTokenByToken(values.token);
-    if (!existingToken) {
+    if (!existingToken || existingToken.length === 0) {
         return NextResponse.json({ error: "Invalid token!" })
     }
 
-    const hasExpired = existingToken.expires < new Date();
+    const hasExpired = existingToken[0].expiresAt < new Date();
     if (hasExpired) {
         return NextResponse.json({ error: "Token has expired!" })
     }
 
-    const existingUser = await getUserByEmail(existingToken.email);
+    const existingUser = await getUserByEmail(existingToken[0].email);
     if (!existingUser) {
         return NextResponse.json({ error: "Email does not exist!" })
     }
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
 
     await db.update(users).set({
         password: hashedPassword
-    }).where(eq(users.email, existingToken.email))
+    }).where(eq(users.email, existingToken[0].email))
 
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.email, existingToken.email))
+    await db.delete(passwordResetToken).where(eq(passwordResetToken.email, existingToken[0].email))
     return NextResponse.json({ success: "Password updated!" })
 }
