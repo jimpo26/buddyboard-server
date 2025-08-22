@@ -60,6 +60,5 @@ export async function GET(request: NextRequest) {
             )`
         )
         .groupBy(groups.name, groups.description, groups.image, groups.icon, groups.color, groups.isPublic, groups.publicLink, groups.proprietaryUserId, groups.id)
-    console.log(group, invitations)
     return NextResponse.json({ success: true, group, invitations });
 }

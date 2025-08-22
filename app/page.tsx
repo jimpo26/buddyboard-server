@@ -100,7 +100,7 @@ export default function LandingPage() {
                         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                             Why Choose
                             <span className="relative inline-block ml-2">
-                                <span className="relative z-10 text-primary">ActivityTracker?</span>
+                                <span className="relative z-10 text-primary">BuddyBoard?</span>
                                 {/* Curved highlight */}
                                 <svg className="absolute inset-0 w-full h-full -z-0" viewBox="0 0 200 40" fill="none">
                                     <ellipse cx="100" cy="20" rx="90" ry="15" fill="rgb(16 185 129)" opacity="0.2" />

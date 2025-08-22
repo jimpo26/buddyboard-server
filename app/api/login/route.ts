@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         const token = await encode({
             token: { sub: existingUser.id.toString(), name: existingUser.name, iat: Date.now(), exp: Date.now() + 60 * 60 * 24 * 30, email: existingUser.email, image: existingUser.image },
             secret: process.env.NEXTAUTH_SECRET || "",
-            salt: process.env.NODE_ENV === "development" ? "authjs.session-token" : "__Secure-authjs.session-token",
+            salt: process.env.NODE_ENV === "development" ? "authjs.session-token" : "authjs.session-token",
             maxAge: 60 * 60 * 24 * 30,
         });
         /*const cookie = await cookies()
