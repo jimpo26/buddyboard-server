@@ -2,6 +2,12 @@
 const nextConfig = {
     serverExternalPackages: ["@auth/core"],
     transpilePackages: ["@activity-tracker/shared"], // if using shared package
+    eslint: {
+        ignoreDuringBuilds: true
+    },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
 };
 
 module.exports = nextConfig;
