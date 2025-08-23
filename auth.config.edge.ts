@@ -1,7 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
 import Apple from "next-auth/providers/apple";
-import { jwtVerify } from "jose";
 
 // Edge-safe: only OAuth providers, no DB
 export default {

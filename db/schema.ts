@@ -242,6 +242,24 @@ export const userSubscriptions = pgTable("user_subscriptions", {
     index("subscriptions_created_at_idx").on(table.createdAt),
 ]));
 
+
+// Push notification tokens table for storing Expo Push Tokens
+export const pushTokens = pgTable("push_tokens", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    token: text("token").notNull(),
+    deviceId: text("device_id").notNull(), // Unique identifier for the device
+    deviceName: text("device_name"),
+    deviceType: text("device_type"), // ios, android
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ([
+    uniqueIndex("push_tokens_token_idx").on(table.token),
+    uniqueIndex("push_tokens_user_device_idx").on(table.userId, table.deviceId),
+    index("push_tokens_user_id_idx").on(table.userId),
+]));
+
 // Define relationships for better TypeScript inference
 export const usersRelations = relations(users, ({ many }) => ({
     groupsOwned: many(groups),
@@ -301,6 +319,15 @@ export const userSubscriptionsRelations = relations(userSubscriptions, ({ one })
     }),
 }));
 
+// Relations for push tokens
+export const pushTokensRelations = relations(pushTokens, ({ one }) => ({
+    user: one(users, {
+        fields: [pushTokens.userId],
+        references: [users.id],
+    }),
+}));
+
+
 // Export types for TypeScript
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -320,3 +347,5 @@ export type PasswordResetToken = typeof passwordResetToken.$inferSelect;
 export type NewPasswordResetToken = typeof passwordResetToken.$inferInsert;
 export type TwoFactorToken = typeof twoFactorToken.$inferSelect;
 export type NewTwoFactorToken = typeof twoFactorToken.$inferInsert;
+export type PushToken = typeof pushTokens.$inferSelect;
+export type NewPushToken = typeof pushTokens.$inferInsert;

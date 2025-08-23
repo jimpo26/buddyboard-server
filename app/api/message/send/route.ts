@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { groupMembers, messages, topics } from "@/db/schema";
 import { currentUser } from "@/lib/auth";
 import { and, eq } from "drizzle-orm";
+import { sendMessageNotification } from "@/lib/push-notifications";
 
 // Validation schema for message creation
 const SendMessageSchema = z.object({
@@ -55,6 +56,23 @@ export async function POST(request: Request): Promise<NextResponse> {
         // Fetch the user info to include in response
         const userName = user.name;
         const userEmail = user.email;
+        // Send push notifications to group members (async)
+        try {
+            // Don't await this to avoid delaying the response
+            sendMessageNotification({
+                topicId,
+                groupId: groupMember[0].topics.groupId,
+                senderId: user.id!,
+                senderName: userName || user.email!,
+                messageContent: content
+            }).catch(error => {
+                console.error("[PUSH_NOTIFICATION_ERROR]", error);
+            });
+        } catch (error) {
+            // Log error but don't fail the request
+            console.error("[PUSH_NOTIFICATION_ERROR]", error);
+        }
+
         // Return the newly created message with user info
         return NextResponse.json({
             success: true,

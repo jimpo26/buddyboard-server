@@ -10,7 +10,6 @@ import { twoFactorConfirmations, users } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { getToken } from "next-auth/jwt";
 
-
 export const {
     handlers: { GET, POST },
     auth,
@@ -88,5 +87,6 @@ export const {
     },
     adapter: DrizzleAdapter(db),
     session: { strategy: "jwt" },
+    useSecureCookies: false,
     ...authConfig
 })
