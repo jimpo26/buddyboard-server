@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { messages, topics, groupMembers, users } from "@/db/schema";
 import { eq, and, desc, count, sql } from "drizzle-orm";
-import { auth } from "@/auth";
 import { currentUser } from "@/lib/auth";
 
 export async function GET(
@@ -88,7 +87,7 @@ export async function GET(
             )
             .groupBy(sql`DATE(${messages.createdAt})`)
             .orderBy(sql`DATE(${messages.createdAt})`);
-        console.log(activityTimeline)
+
         // 2. Top Performers in this topic
         const topPerformers = await db
             .select({

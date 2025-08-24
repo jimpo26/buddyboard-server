@@ -1,7 +1,7 @@
 import { CreateGroupSchema } from "@/schemas/groups";
 import z from "zod";
 import { db } from "./db";
-import { allowedMembersPrivateGroup, groupMembers, groups } from "@/db/schema";
+import { allowedMembersPrivateGroup, groupMembers, groups, users } from "@/db/schema";
 import { and, eq, count } from "drizzle-orm";
 import { AlreadyAMemberException, GroupLimitReachedException, GroupNotFoundException, NotAGroupMemberException, UserUnauthorizedException } from "@/exceptions/group";
 
@@ -36,7 +36,7 @@ export async function editGroup(values: z.infer<typeof CreateGroupSchema>, group
 }
 
 
-export async function joinGroup(userId: string, values: { publicLink?: string, groupId?: string }) {
+export async function joinGroup(userId: string, values: { publicLink?: string, invitedBy?: string, groupId?: string }) {
     if (!values.publicLink && !values.groupId) {
         throw new Error("No public link or group id provided");
     }
@@ -61,9 +61,16 @@ export async function joinGroup(userId: string, values: { publicLink?: string, g
             throw new GroupLimitReachedException("Group has reached its member limit");
         }
 
+        // check if invitedBy is a valid, existing user
+        let invitedByUser: { id?: string; }[] = [{ id: undefined }];
+        if (values.invitedBy) {
+            invitedByUser = await db.select({ id: users.id }).from(users).where(eq(users.id, values.invitedBy)).limit(1);
+        }
+
         const [newMember] = await db.insert(groupMembers).values({
             groupId: group[0].id,
             userId,
+            invitedBy: invitedByUser[0].id,
             role: "member",
         }).returning();
         return newMember;
@@ -87,6 +94,7 @@ export async function joinGroup(userId: string, values: { publicLink?: string, g
 
     const [newMember] = await db.insert(groupMembers).values({
         groupId: values.groupId!,
+        invitedBy: isMemberAllowed[0].invitedBy,
         userId,
         role: "member",
     }).returning();

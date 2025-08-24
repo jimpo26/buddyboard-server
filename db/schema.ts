@@ -146,6 +146,7 @@ export const groupMembers = pgTable("group_members", {
     userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     role: text("role").default("member").notNull(), // "owner", "admin", "member"
     joinedAt: timestamp("joined_at").defaultNow().notNull(),
+    invitedBy: text("invited_by").references(() => users.id, { onDelete: "set null" }),
 }, (table: { groupId: any; userId: any; }) => ([
     uniqueIndex("group_members_group_user_idx").on(table.groupId, table.userId),
     index("group_members_group_id_idx").on(table.groupId),
@@ -260,6 +261,26 @@ export const pushTokens = pgTable("push_tokens", {
     index("push_tokens_user_id_idx").on(table.userId),
 ]));
 
+
+// Gift redemptions table for storing user gift address information
+export const giftRedemptions = pgTable("gift_redemptions", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    fullName: text("full_name").notNull(),
+    streetAddress: text("street_address").notNull(),
+    city: text("city").notNull(),
+    state: text("state").notNull(),
+    postalCode: text("postal_code").notNull(),
+    country: text("country").notNull(),
+    redeemedAt: timestamp("redeemed_at").defaultNow().notNull(),
+    shipped: boolean("shipped").default(false).notNull(),
+    shippedAt: timestamp("shipped_at"),
+    trackingNumber: text("tracking_number"),
+}, (table) => ([
+    uniqueIndex("gift_redemptions_user_id_idx").on(table.userId),
+    index("gift_redemptions_redeemed_at_idx").on(table.redeemedAt),
+]));
+
 // Define relationships for better TypeScript inference
 export const usersRelations = relations(users, ({ many }) => ({
     groupsOwned: many(groups),
@@ -267,6 +288,7 @@ export const usersRelations = relations(users, ({ many }) => ({
     messages: many(messages),
     subscriptions: many(userSubscriptions),
     topicsCreated: many(topics),
+    giftRedemptions: many(giftRedemptions),
 }));
 
 export const groupsRelations = relations(groups, ({ one, many }) => ({
@@ -327,6 +349,13 @@ export const pushTokensRelations = relations(pushTokens, ({ one }) => ({
     }),
 }));
 
+// Relations for gift redemptions
+export const giftRedemptionsRelations = relations(giftRedemptions, ({ one }) => ({
+    user: one(users, {
+        fields: [giftRedemptions.userId],
+        references: [users.id],
+    }),
+}));
 
 // Export types for TypeScript
 export type User = typeof users.$inferSelect;
@@ -349,3 +378,5 @@ export type TwoFactorToken = typeof twoFactorToken.$inferSelect;
 export type NewTwoFactorToken = typeof twoFactorToken.$inferInsert;
 export type PushToken = typeof pushTokens.$inferSelect;
 export type NewPushToken = typeof pushTokens.$inferInsert;
+export type GiftRedemption = typeof giftRedemptions.$inferSelect;
+export type NewGiftRedemption = typeof giftRedemptions.$inferInsert;

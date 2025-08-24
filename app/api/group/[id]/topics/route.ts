@@ -3,6 +3,7 @@ import { groupMembers, topics } from "@/db/schema";
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { currentUser } from "@/lib/auth";
+import { getStreakByUserAndTopic } from "@/lib/analytics";
 
 export async function GET(
     request: Request,
@@ -35,6 +36,7 @@ export async function GET(
             .from(topics)
             .where(eq(topics.groupId, groupId))
             .orderBy(topics.name);
+
         return NextResponse.json({
             success: true,
             topics: groupTopics

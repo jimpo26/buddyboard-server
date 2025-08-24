@@ -3,6 +3,7 @@ import { currentUser } from "@/lib/auth";
 import { and, eq, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { groupMembers } from "@/db/schema";
+import { getStreakByUserAndTopic } from "@/lib/analytics";
 /*
 type TopicList = {
     id: string,
@@ -69,6 +70,13 @@ export async function GET(
         LEFT JOIN "user" u ON u.id = m.user_id
         WHERE t.group_id = ${groupId}
         ORDER BY t.created_at DESC`)
+
+    const topicStreakMap = new Map<string, number>();
+    await Promise.all(topicList.rows.map(async (topic, idx) => {
+        const res = await getStreakByUserAndTopic(user.id!, topic as { id: string, defaulttext: string });
+        topicStreakMap.set(topic.id as string, res.currentStreak)
+    }))
+    console.log(topicStreakMap)
     return NextResponse.json({
         success: true,
         topics: topicList.rows.map(el => ({
@@ -86,7 +94,8 @@ export async function GET(
             lastMessageContent: el.last_message_content,
             lastMessageCreatedAt: el.last_message_created_at,
             lastMessageUserName: el.last_message_user_name,
-            lastMessageUserEmail: el.last_message_user_email
+            lastMessageUserEmail: el.last_message_user_email,
+            userStreak: topicStreakMap.get(el.id as string)
         })),
     });
 }
