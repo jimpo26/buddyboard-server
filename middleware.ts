@@ -7,6 +7,7 @@ import {
     publicRoutes,
 } from "@/routes";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 const { auth } = NextAuth(edgeAuthConfig);
 

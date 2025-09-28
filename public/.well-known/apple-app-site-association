@@ -1,0 +1,25 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "QQ57RJ5UTD.com.example.myapp",
+                "paths": [
+                    "/join/*",
+                    "/login/*",
+                    "/register/*"
+                ]
+            }
+        ]
+    },
+    "activitycontinuation": {
+        "apps": [
+            "QQ57RJ5UTD.com.jimpo26.buddyboard"
+        ]
+    },
+    "webcredentials": {
+        "apps": [
+            "QQ57RJ5UTD.com.jimpo26.buddyboard"
+        ]
+    }
+}

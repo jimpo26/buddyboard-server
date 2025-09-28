@@ -5,15 +5,16 @@ import Apple from "next-auth/providers/apple";
 
 import { LoginSchema } from "./schemas";
 import { getUserByEmail } from "@/data/user";
+import { NextAuthConfig } from "next-auth";
 
-export const authOptions = {
+export default {
     providers: [
         Apple({
             clientId: process.env.APPLE_CLIENT_ID,
             clientSecret: process.env.APPLE_CLIENT_SECRET,
         }),
         Google({
-            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientId: "534561355666-oqgbpf4o9r0i8qjp8k7er81tv8sv14rl.apps.googleusercontent.com",//process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
         Credentials({
@@ -31,4 +32,4 @@ export const authOptions = {
             },
         }),
     ],
-};
+} satisfies NextAuthConfig;
