@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.jimpo26.buddyboard",
+            "sha256_cert_fingerprints": [
+                "F9:7A:47:9E:AF:1B:AC:2C:94:6C:AC:23:61:A3:7A:28:6A:26:7B:4C:46:19:93:4C:A8:29:5E:C3:3B:AA:3F:4E"
+            ]
+        }
+    }
+]

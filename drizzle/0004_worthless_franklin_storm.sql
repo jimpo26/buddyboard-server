@@ -1,0 +1,1 @@
+ALTER TABLE "topics" ADD COLUMN "default_text" varchar(80) NOT NULL;
