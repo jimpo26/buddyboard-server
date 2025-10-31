@@ -72,14 +72,14 @@ export async function GET(
         ORDER BY t.created_at DESC`)
 
     const topicStreakMap = new Map<string, number>();
-    await Promise.all(topicList.rows.map(async (topic, idx) => {
+    await Promise.all(topicList.rows.map(async (topic: { id: any; defaulttext?: string; }, idx: any) => {
         const res = await getStreakByUserAndTopic(user.id!, topic as { id: string, defaulttext: string });
         topicStreakMap.set(topic.id as string, res.currentStreak)
     }))
     console.log(topicStreakMap)
     return NextResponse.json({
         success: true,
-        topics: topicList.rows.map(el => ({
+        topics: topicList.rows.map((el: { id: string; name: any; defaulttext: any; description: any; icon: any; color: any; groupid: any; createdbyid: any; isactive: any; createdat: any; updatedat: any; last_message_content: any; last_message_created_at: any; last_message_user_name: any; last_message_user_email: any; }) => ({
             id: el.id,
             name: el.name,
             defaultText: el.defaulttext,

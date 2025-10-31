@@ -15,10 +15,10 @@ export const getStreakByUserAndTopic = async (userId: string, topic: { id: strin
         .innerJoin(users, eq(messages.userId, users.id))
         .where(and(eq(messages.topicId, topic.id), eq(messages.content, topic.defaulttext), eq(messages.userId, userId)))
         .orderBy(messages.userId, desc(messages.createdAt));
-
+    console.log(allTopicMessages)
     const userData: { userName: string | null, userImage: string | null, dates: string[] } = {
-        userName: allTopicMessages[0].userName,
-        userImage: allTopicMessages[0].userImage,
+        userName: allTopicMessages[0]?.userName,
+        userImage: allTopicMessages[0]?.userImage,
         dates: []
     };
     allTopicMessages.forEach((msg: any) => {
