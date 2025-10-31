@@ -18,13 +18,14 @@ export async function POST(request: Request): Promise<NextResponse> {
             const group = await dropInvitation(user.id!, groupId);
             return NextResponse.json({ success: true, group });
         }
-        const [link, invitedBy] = publicLink?.split("?")
+        const [link, invitedBy] = publicLink?.split("?") || [null, null]
         console.log({ publicLink: link?.split("/").pop(), invitedBy })
         const group = await joinGroup(user.id!, {
             publicLink: link?.split("/").pop(), invitedBy: invitedBy?.replace("\n", ""), groupId
         });
         return NextResponse.json({ success: true, group });
     } catch (error) {
+        console.log(error)
         if (error instanceof GroupNotFoundException) {
             return NextResponse.json({ error: error.message })
         }

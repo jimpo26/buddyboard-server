@@ -63,7 +63,7 @@ export async function sendMessageNotification({
                 inArray(pushTokens.userId, memberIds),
                 eq(pushTokens.isActive, true)
             ));
-
+            
         if (!tokens.length) {
             console.log(`No push tokens found for group members`);
             return;

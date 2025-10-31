@@ -33,5 +33,5 @@ export default async function Testing() {
         salt: process.env.NODE_ENV === "development" ? "authjs.session-token" : "authjs.session-token",
         maxAge: 60 * 60 * 24 * 30,
     });
-    return redirect(`exp://--/auth/login?jwt=${token}&user=${encodeURIComponent(JSON.stringify(existingUser))}`)
+    return redirect(`https://buddyboard.co/auth/login?jwt=${token}&user=${encodeURIComponent(JSON.stringify(existingUser))}`)
 }
