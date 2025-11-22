@@ -1,0 +1,41 @@
+Politica sulla Privacy di BuddyBoard
+
+Ultimo aggiornamento: 22/11/2025
+
+1. Introduzione
+
+BuddyBoard ("l'App") è fornita da Lorenzo. La presente Politica sulla Privacy spiega le nostre politiche relative alla raccolta, all'uso e alla divulgazione delle informazioni personali quando si utilizza la nostra App.
+
+L'App non raccoglie, archivia o trasmette dati personali o sensibili dall'utente a server esterni. Tutti i dati rimangono sul dispositivo dell'utente.
+
+2. Dati che Non Raccogliamo
+
+Non raccogliamo, archiviamo o abbiamo accesso a:
+
+    Dati di localizzazione.
+
+    Dati diagnostici o di utilizzo.
+
+    Specifiche del dispositivo (modello, sistema operativo, versione).
+
+3. Gestione dei Dati dell'Utente (Immagini)
+
+L'unica interazione con i dati personali (oltre ai dati inseriti in fase di registrazione) avviene quando l'utente sceglie volontariamente di caricare un'immagine dalla propria galleria.
+
+    Azione: L'App utilizza la funzione nativa del sistema operativo per aprire la galleria e consentire all'utente di selezionare un file (foto).
+
+    Elaborazione: L'immagine selezionata viene utilizzata esclusivamente per lo scopo previsto dall'utente all'interno dell'App (ad esempio, come immagine del profilo) e non viene condivisa o trasmessa a terzi.
+
+4. Autorizzazione Camera (Permesso Non Utilizzato)
+
+L'autorizzazione android.permission.CAMERA viene rilevata dal sistema Google Play.
+
+    Dichiarazione: L'App non utilizza in alcun modo la fotocamera del dispositivo per scattare foto o registrare video.
+
+    Motivazione: L'autorizzazione è inclusa nel pacchetto finale (AAB) a causa delle dipendenze di una libreria di terze parti (Expo Image Picker) utilizzata per accedere alla galleria, ma la funzionalità della fotocamera non è mai richiamata né utilizzata dall'App.
+
+5. Contatti
+
+Per qualsiasi domanda o suggerimento riguardante questa Politica sulla Privacy, non esitate a contattarci:
+
+    Email: lorenzo@dalzotto.dev
